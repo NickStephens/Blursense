@@ -1,0 +1,6 @@
+include BlurClient.repy
+
+
+class BatteryRequest (BlurClient):
+	def get ( self, params ):
+		return self.mRPCClient.send_request( 'BatterySensor.level', () )

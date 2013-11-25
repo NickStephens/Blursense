@@ -1,11 +1,13 @@
-import xmlrpclib
-import errno
-import socket
+include xmlrpc_client.repy
 
 
 # Ports used by Sensorium
 SEATTLE_PORTS = [63090, 63091, 63092, 63093, 63094, 63095, 63096, 63097, 63098, 63099]
 LOCALHOST = '127.0.0.1'
+
+
+# Connenection Refused Errno
+ECONNREFUSED = 111
 
 
 class BlurClient:
@@ -19,7 +21,7 @@ class BlurClient:
 		self.mPort = 0
 
 		# Initialize XMLRPC Client
-		self.mRPCClient = xmlrpclib.Server('http://%s:%s' % ( self.mAddr, self.mPorts[self.mPort]) )
+		self.mRPCClient = xmlrpc_client_Client('http://%s:%s/' % ( self.mAddr, self.mPorts[self.mPort]) )
 
 
 	# Overriden by Subclasses
@@ -32,9 +34,9 @@ class BlurClient:
 			try:
 				return self.get(params)	
 
-			except socket.error as e:
+			except Exception as e:
 				# Check for Connection Refused Error
-				if e[0] == errno.ECONNREFUSED:
+				if e[0] == ECONNREFUSED:
 					if self.mPort >= len( self.mPorts ):
 						raise Exception( 'Connection Refused' )
 					else:
