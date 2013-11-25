@@ -1,0 +1,9 @@
+include BlurClient.repy
+
+
+class GPSRequest (BlurClient):
+	def get (self, params):
+		lat = self.mRPCClient.send_request ('GPSLocationSensor.latitude', ())
+		lon = self.mRPCClient.send_request ('GPSLocationSensor.longitude', ())
+
+		return ( lat, lon )
