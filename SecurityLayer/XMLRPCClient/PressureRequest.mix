@@ -3,3 +3,6 @@ include BlurClient.repy
 class PressureRequest (BlurClient):
 	def get (self, params):
 		return self.mRPCClient.send_request ( 'PressureSensor.pressure', () )
+
+	def name ( self ):
+		return "pressure"

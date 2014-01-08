@@ -27,6 +27,11 @@ class BlurClient:
 	# Overriden by Subclasses
 	def get(self, params):
 		return None
+
+	
+	# Return a Name
+	def name(self):
+		return ""
 				
 
 	def request(self, params = 0):

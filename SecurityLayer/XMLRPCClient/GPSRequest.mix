@@ -7,3 +7,6 @@ class GPSRequest (BlurClient):
 		lon = self.mRPCClient.send_request ('GPSLocationSensor.longitude', ())
 
 		return ( lat, lon )
+
+	def name ( self ):
+		return "gps"
