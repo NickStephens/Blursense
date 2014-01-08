@@ -1,0 +1,59 @@
+include xmlrpc_server.repy
+include BatteryRequest.repy
+include GPSRequest.repy
+include PressureRequest.repy
+
+
+SEATTLE_PORTS = [63090, 63091, 63092, 63093, 63094, 63095, 63096, 63097, 63098, 63099]
+LOCALHOST = "127.0.0.1"
+
+
+class BlurServer:
+	
+	def __init__ (self, addr, port):
+		self.mAddr = addr
+		self.mPort = None
+
+		# Probe for a working port
+		for p in SEATTLE_PORTS:
+			try:
+				self.mServer = xmlrpc_server_SimpleXMLRPCServer((LOCALHOST, p)) 
+			except socket.error:
+				continue
+			self.mPort = p
+			break
+		if self.mPort == None:
+			raise Exception("No Available Port")
+
+		self.mServer.register_function(self.caller)
+		self.mSensors = {}
+
+
+	# Should we make it multi-threaded
+	def start(self):
+		# Register Sensors
+		self.register(BatteryRequest())
+		self.register(GPSRequest())
+		self.register(PressureRequest())
+		
+		self.mServer.server_forever()
+		
+
+	# Register a sensor
+	def register(self, sensor):
+		name = sensor.name()
+		self.mSensors[name] = sensor
+
+	
+	def caller(self, sensor, params):
+		if not sensor in self.mSensors:
+			return ""
+
+		return self.mSensors["sensor"].get(params)
+		
+
+
+
+		
+		
+		
