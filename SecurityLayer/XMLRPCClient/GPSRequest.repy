@@ -1,5 +1,6 @@
-include BlurClient.repy
+#include BlurClient.repy
 
+dy_import_module_symbols("BlurClient.repy")
 
 class GPSRequest (BlurClient):
 	def get (self, params):

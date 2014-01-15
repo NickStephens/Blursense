@@ -1,4 +1,6 @@
-include xmlrpc_client.repy
+#include xmlrpc_client.repy
+
+dy_import_module_symbols("xmlrpc_client.repy")
 
 
 # Ports used by Sensorium
