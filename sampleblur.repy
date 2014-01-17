@@ -1,0 +1,4 @@
+dy_import_module_symbols("blurserver.repy")
+
+if callfunc == 'initialize':
+	server = BlurServer()

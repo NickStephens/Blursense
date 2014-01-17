@@ -5,9 +5,9 @@
 
 
 dy_import_module_symbols("xmlrpc_server.repy")
-dy_import_module_symbols("BatteryRequest.repy")
-dy_import_module_symbols("GPSRequest.repy")
-dy_import_module_symbols("PressureRequest.repy")
+dy_import_module_symbols("batteryrequest.repy")
+dy_import_module_symbols("gpsrequest.repy")
+dy_import_module_symbols("pressurerequest.repy")
 
 
 SEATTLE_PORTS = [63090, 63091, 63092, 63093, 63094, 63095, 63096, 63097, 63098, 63099]
@@ -17,22 +17,24 @@ LOCALHOST = "127.0.0.1"
 class BlurServer:
 	
 	def __init__ (self):
+		log("Server Initializing")
+		self.mSensors = {}
+		self.addSensors()	
+
 		for p in SEATTLE_PORTS:
 			try:
+				log(str(p) + "\n")
 				self.mServer = xmlrpc_server_SimpleXMLRPCServer((LOCALHOST, p))
-				self.mServer.server_forever()
+				self.mServer.register_function(caller, "caller")
+				self.mServer.serve_forever()
 				break
 			except Exception as e:
-				log(e)
+				log(e) 
 				self.mServer = None
 				continue
 
 		if self.mServer == None:
 			raise Exception("Ports Unavailable!")
-
-		self.mServer.register_function(self.caller)
-		self.mSensors = {}
-		self.addSensors()
 
 
 	def addSensors(self):
@@ -40,8 +42,6 @@ class BlurServer:
 		self.register(BatteryRequest())
 		self.register(GPSRequest())
 		self.register(PressureRequest())
-		
-		self.mServer.server_forever()
 		
 
 	# Register a sensor
@@ -55,10 +55,3 @@ class BlurServer:
 			return ""
 
 		return self.mSensors["sensor"].get(params)
-		
-
-
-
-		
-		
-		
