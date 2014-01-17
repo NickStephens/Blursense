@@ -1,0 +1,15 @@
+'''
+	This is a simple version of waitforconn.
+'''
+def waitforconn(localip, localport, function):
+	# Bind to socket
+	serverSocket = listenforconnection(localip, localport)
+
+	# Wait for connection
+	while True:
+		try:
+			ret = serverSocket.getconnection()
+			function(ret[2])
+		except SocketWouldBlockError as e:
+			continue
+
