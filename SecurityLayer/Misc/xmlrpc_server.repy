@@ -143,7 +143,7 @@ class xmlrpc_server_SimpleXMLRPCServer:
     """
 
     self._callback_functions[name] = function
-
+  
 
   def serve_forever(self):
     """
@@ -194,9 +194,7 @@ class xmlrpc_server_SimpleXMLRPCServer:
       None.
     """
 
-    self._listen_comm = waitforconn(self._listen_ip, self._listen_port, \
-        self._connect)
-
+    self._listen_comm = waitforconn(self._listen_ip, self._listen_port, self._connect) 
     # Acquire the lock so we don't try to listen in more than one server
     # thread. Also, shutdown() excepts to release the lock.
     self._stoplock.acquire(True)
@@ -238,7 +236,6 @@ class xmlrpc_server_SimpleXMLRPCServer:
     raise xmlrpc_server_ClientError("xmlrpc_server error: client tried" + \
         " to call a function that does not exist")
 
-
   def _connect(self, socket):
     # The callback for client connections.  Handle the request.
     full_request_data = ""
@@ -263,12 +260,10 @@ class xmlrpc_server_SimpleXMLRPCServer:
     # that want keep-alive for now.
 
     http_header_text, post_payload = request_data.split("\r\n\r\n", 1)
-
     http_headers = {}
     for line in http_header_text.split("\r\n"):
       header_name, header_value = line.split(": ", 1)
       http_headers[header_name.lower()] = header_value
-
     # Sometimes the client hasn't finished sending us the request; in this
     # case we keep trying to recieve more data until we can parse the
     # data. There is probably a better way of doing this (one solution is
@@ -285,12 +280,12 @@ class xmlrpc_server_SimpleXMLRPCServer:
     # Make the method call, get the result.
     try:
       result = self._call_function(methodname, params)
-    except Exception:
+    except Exception as e:
+      log(e)
       result = None   # Maybe we should send a fault back to the client?
 
     # Encode the result and send it back to the client.
     xmlresponse = xmlrpc_common_response2xml(result)
-
     response = "HTTP/1.1 200 OK\r\nServer: SimpleXMLRPCServer on Repy\r\n" + \
       "Content-type: text/xml\r\nContent-length: %i\r\n\r\n%s" % \
       (len(xmlresponse), xmlresponse)
@@ -302,6 +297,3 @@ class xmlrpc_server_SimpleXMLRPCServer:
       response = response[sent:]
 
     socket.close()
-
-def hello():
-	print "Hello"

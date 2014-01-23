@@ -1,0 +1,37 @@
+dy_import_module_symbols("sensorutil")
+
+
+LOCALHOST = "127.0.0.1"
+AP_PORT = 45678
+
+TIMEOUT = 5
+
+
+class Battery:
+	def __init__(self, sl4a_socket):
+		if sl4a_socket == None:
+			try:
+				sl4a_socket = openconnection(LOCALHOST, AP_PORT, LOCALHOST, 12345, TIMEOUT)
+			except Exception as e:
+				log(e)
+				raise e
+
+		self.mSocket = sl4a_socket
+		
+
+		# Start Battery Monitoring
+		json_rpc(self.mSocket, "batteryStartMonitoring")
+
+
+	def close(self):
+		json_rpc(self.mSocket, "batteryStopMonitoring")
+		self.mSocket.close()
+
+
+	def name(self):
+		return "battery"
+
+
+	def get(self, params):
+		return sl4a_dic_paser(json_rpc(self.mSocket, "batteryGetLevel"))["result"]
+		
