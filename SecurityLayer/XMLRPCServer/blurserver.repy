@@ -1,4 +1,5 @@
 dy_import_module_symbols("xmlrpc_server.repy")
+dy_import_module_symbols("xmlrpc_server_custom.repy")
 dy_import_module_symbols("battery.repy")
 
 
@@ -15,7 +16,8 @@ class BlurServer:
 		for p in SEATTLE_PORTS:
 			try:
 				log(str(p) + "\n")
-				self.mServer = xmlrpc_server_SimpleXMLRPCServer((LOCALHOST, p))
+				#self.mServer = xmlrpc_server_SimpleXMLRPCServer((LOCALHOST, p))
+				self.mServer = XMLRPCServer(LOCALHOST, p)
 				self.mServer.register_function(self.callback_function(), "request")
 				self.mServer.serve_forever()
 				break
