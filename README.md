@@ -7,7 +7,6 @@ install sl4a (scripting layer for seattle testbed)
 clone yyzhuang repo on github to repy_V2/seattlelib/
 
 1. git clone https://github.com/haonguyen14/Blursense/
-(TUES/Seattle/blursense/repy_v2/seattlelib/Blursense/SecurityLayer)
 2. copy Misc/exports.sh to /sdcard/data/tmp/
 3. run exports.sh
 4. copy all .repy files from /Misc and XMLRPCServer/ to repy_v2/Seattlelib
