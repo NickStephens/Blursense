@@ -15,6 +15,7 @@ class Battery:
 			port = int(port)
 			try:
 				sl4a_socket = openconnection(LOCALHOST, AP_PORT, LOCALHOST, port, TIMEOUT)
+				log("sl4a socket consuming port " + str(port) + "\n")
 				break
 			except Exception as e:
 				log(e)

@@ -3,7 +3,6 @@ dy_import_module_symbols("xmlrpc_server_custom.repy")
 dy_import_module_symbols("battery.repy")
 
 
-SEATTLE_PORTS = [63090, 63091, 63092, 63093, 63094, 63095, 63096, 63097, 63098, 63099]
 LOCALHOST = "127.0.0.1"
 
 
@@ -13,11 +12,13 @@ class BlurServer:
 		log("Server Initializing")
 		self.addSensors()
 
-		for p in SEATTLE_PORTS:
+		ports = list(getresources()[0]['connport'])
+		for port in ports:
+			port = int(port)
 			try:
-				log(str(p) + "\n")
 				#self.mServer = xmlrpc_server_SimpleXMLRPCServer((LOCALHOST, p))
-				self.mServer = XMLRPCServer(LOCALHOST, p)
+				self.mServer = XMLRPCServer(LOCALHOST, port)
+				log("XMLRPCServer consuming port " + str(port) + "\n")
 				self.mServer.register_function(self.callback_function(), "request")
 				self.mServer.serve_forever()
 				break
