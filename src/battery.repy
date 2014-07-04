@@ -9,17 +9,22 @@ TIMEOUT = 5
 
 class Battery:
 	def __init__(self, sl4a_socket):
-		if sl4a_socket == None:
+		ports = list(getresources()[0]['connport'])
+
+		for port in ports: 
+			port = int(port)
 			try:
-				sl4a_socket = openconnection(LOCALHOST, AP_PORT, LOCALHOST, 12345, TIMEOUT)
+				sl4a_socket = openconnection(LOCALHOST, AP_PORT, LOCALHOST, port, TIMEOUT)
+				break
 			except Exception as e:
 				log(e)
-				raise e
+
+		if not sl4a_socket:
+			raise
 
 		self.mSocket = sl4a_socket
-		
 
-		# Start Battery Monitoring
+# Start Battery Monitoring
 		json_rpc(self.mSocket, "batteryStartMonitoring")
 
 
