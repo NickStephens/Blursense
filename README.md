@@ -1,26 +1,51 @@
 Blursense
 =========
-Blursense depends on Sensibility Testbed: github.com/yyzhuang/sensibility
 
-0. run adb to connect to Android console
-install sl4a (scripting layer for seattle testbed)
-clone yyzhuang repo on github to repy_V2/seattlelib/
+The Project
+-----------
+See [this paper](http://isis.poly.edu/~jcappos/papers/cappos_blursense_sas_14.pdf) for a thorough description of Blursense.
 
-1. git clone https://github.com/haonguyen14/Blursense/
-2. copy Misc/exports.sh to /sdcard/data/tmp/
-3. run exports.sh
-4. copy all .repy files from /Misc and XMLRPCServer/ to repy_v2/Seattlelib
-the functions in Misc/ are needed because repy_V2 doesn't have waitforconn()
-5. invoke python repy.py blurserver.repy
+Currently
+---------
 
-** need to write server that initializes BlurServer object **
+At this point in time blursense is only made up of an XMLRPC implemented
+in the `repy` sandbox. The server uses `repy` 2 to listen for sensor requests.
+Once a request has been made, the server will determine how it wants to serve
+back the data. This could range from slightly modifying the actual sensor's
+data to returning nothing to returning the original data.
 
-how to redirect sensor request to XMLRPCserver
+Testing it
+----------
 
-I. subclass SensorManager class. src is 
-on github, gitorious.org
-look for sensor_data_init() inject code to XMLRPCServer before that.
-in static private class SensorThread
+NOTE: These instructions will only work on \*nix systems!
 
-II. change every installed App (from apk file) and add call to XMLRPCServer whenever
-sensor data is requested.
+0. First download the [sensibility testbed](https://sensibilitytestbed.com/projects/project/wiki/demo) on an Android device. The link should lead you through the installation process and should provide you with some methods of playing with the testbed. Once you've got your fill remain in your `seash` session for the following steps.
+
+
+1. Clone this repository into your `seattle-demokit` directory.
+
+	```
+	seattle-demokit$ git clone git@github.com:nickstephens/Blursense.git
+	```
+
+2. Now back in your `seash` upload the following repy scripts to your android device.
+
+    ```
+	upload Blursense/src/battery.repy
+	upload Blursense/src/blurserver.repy
+	upload Blursense/src/sampleblur.repy
+	upload waitforconn.repy
+	upload xmlparse.repy
+	upload xmlrpc_server_custom.repy
+	upload xmlrpc_server.repy
+	upload xmlrpc_common.repy
+	upload base64.repy
+	upload urllib.repy
+    upload sensibility/sensorutil.repy
+    ```
+
+3. Start the server!
+
+    ```
+    example@%1 !> startv2 dylink.repy sampleblur.repy
+    ```
