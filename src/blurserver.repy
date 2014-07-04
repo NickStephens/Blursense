@@ -18,7 +18,7 @@ class BlurServer:
 			try:
 				#self.mServer = xmlrpc_server_SimpleXMLRPCServer((LOCALHOST, p))
 				self.mServer = XMLRPCServer(LOCALHOST, port)
-				log("XMLRPCServer consuming port " + str(port) + "\n")
+				log("XMLRPCServer using port " + str(port) + "\n")
 				self.mServer.register_function(self.callback_function(), "request")
 				self.mServer.serve_forever()
 				break

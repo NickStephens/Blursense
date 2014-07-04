@@ -15,7 +15,7 @@ class Battery:
 			port = int(port)
 			try:
 				sl4a_socket = openconnection(LOCALHOST, AP_PORT, LOCALHOST, port, TIMEOUT)
-				log("sl4a socket consuming port " + str(port) + "\n")
+				log("sl4a socket using port " + str(port) + "\n")
 				break
 			except Exception as e:
 				log(e)
@@ -39,5 +39,4 @@ class Battery:
 
 
 	def get(self, params):
-		return sl4a_dic_paser(json_rpc(self.mSocket, "batteryGetLevel"))["result"]
-		
+		return json_rpc(self.mSocket, "batteryGetLevel")
